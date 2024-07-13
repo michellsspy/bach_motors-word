@@ -1,0 +1,12 @@
+apache-beam[gpc]==2.55.0
+psycopg2-binary==2.9.9
+google-cloud-storage
+pyarrow
+setuptools
+apache_beam[dataframe]
+pandas
+fsspec
+gcsfs
+google-cloud-secret-manager
+pandas-gbq 
+google-cloud-bigquery

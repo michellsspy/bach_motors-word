@@ -1,0 +1,58 @@
+steps:
+  # Primeiro passo: configurar as credenciais do Git
+  - name: 'gcr.io/cloud-builders/git'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        git config --global credential.helper 'store --file=/root/.git-credentials'
+        echo "https://${_GITHUB_USERNAME}:${_GITHUB_TOKEN}@github.com" > /root/.git-credentials
+
+  # Segundo passo: clonar o repositório no diretório repo
+  - name: 'gcr.io/cloud-builders/git'
+    args: ['clone', 'https://github.com/michellsspy/motors-word.git', 'repo']
+
+  # Adicionando um passo para listar arquivos no diretório clonado para verificar se tudo foi clonado corretamente
+  - name: 'ubuntu'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - 'ls -al repo'
+
+  # Terceiro passo: copiar arquivos para o bucket do GCS
+  - name: 'gcr.io/cloud-builders/gsutil'
+    args: ['-m', 'cp', '-r', 'repo/*', 'gs://novadrive-motors/cloud-build/']
+
+  # Quarto passo: baixar os arquivos do bucket para o diretório de trabalho
+  - name: 'gcr.io/cloud-builders/gsutil'
+    args: ['-m', 'cp', '-r', 'gs://novadrive-motors/cloud-build/*', 'repo']
+
+  # Quinto passo: executar um script de build
+  - name: 'gcr.io/cloud-builders/npm'
+    dir: 'repo'
+    args: ['install']
+
+  - name: 'gcr.io/cloud-builders/npm'
+    dir: 'repo'
+    args: ['run', 'build']
+
+  # Sexto passo: realizar o deploy
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args:
+      - 'app'
+      - 'deploy'
+      - '--region=${_REGION}'
+      - '--machine-type=${_DEPLOYMENT_AUTOSCALE_MACHINE_TYPE}'
+
+# Configurações adicionais
+options:
+  logging: 'CLOUD_LOGGING_ONLY'  # Opção de logging
+
+# Configuração de substituições (substitutions)
+substitutions:
+  _NODE_ENV: 'production'
+  _PROJECT_ID: 'novadrive-motors-428216'
+  _REGION: 'southamerica-east1'
+  _GITHUB_USERNAME: 'michellss.py@gmail.com'
+  _GITHUB_TOKEN: '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'
+  _DEPLOYMENT_AUTOSCALE_MACHINE_TYPE: 'e2-highcpu-8'

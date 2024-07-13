@@ -1,0 +1,11 @@
+LICENSE
+README.md
+setup.py
+function/__init__.py
+function/get_names.py
+function/get_tables.py
+function/tables_transform_bq.py
+motors_word.egg-info/PKG-INFO
+motors_word.egg-info/SOURCES.txt
+motors_word.egg-info/dependency_links.txt
+motors_word.egg-info/top_level.txt
