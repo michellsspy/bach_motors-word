@@ -5,9 +5,10 @@ roles/storage.objectAdmin
 roles/artifactregistry.reader
 
 
-gcloud artifacts repositories create ingest-motors-word-v1 \
+gcloud artifacts repositories create bach_ingest-motors-word \
     --repository-format=docker \
     --location=southamerica-east1
+    --project=motors-word
 
 
 gcloud auth configure-docker southamerica-east1-docker.pkg.dev
@@ -15,7 +16,7 @@ gcloud auth configure-docker southamerica-east1-docker.pkg.dev
 
 #--->>> Sempre que alterar algo, precisa executar os comandos abaixo novamente
 
-gcloud builds submit --tag southamerica-east1-docker.pkg.dev/motors-word/ingest-motors-word-v1/motors-word-dev:latest .
+gcloud builds submit --tag southamerica-east1-docker.pkg.dev/motors-word/bach_ingest-motors-word/motors-word-dev:latest .
 
 
 #--->>> Subnet
@@ -24,8 +25,8 @@ https://www.googleapis.com/compute/v1/projects/motors-word/regions/southamerica-
 
 #--->>> Executar só quando for utilizar o modelo com arquivo json
 
-gcloud dataflow flex-template build gs://dataflow-flex-model/templates//ingest-motors-word-v1.json \
- --image-gcr-path "southamerica-east1-docker.pkg.dev/motors-word/ingest-motors-word-v1/motors-word-dev:latest" \
+gcloud dataflow flex-template build gs://dataflow-flex-model/templates//bach_ingest-motors-word.json \
+ --image-gcr-path "southamerica-east1-docker.pkg.dev/motors-word/bach_ingest-motors-word/motors-word-dev:latest" \
  --sdk-language "PYTHON" \
  --flex-template-base-image "PYTHON3" \
  --metadata-file "metadata.json" \
@@ -35,7 +36,7 @@ gcloud dataflow flex-template build gs://dataflow-flex-model/templates//ingest-m
 
 
 
-gcloud dataflow flex-template build gs://etl-postgres-mss/templates/ingest-motors-word-v1.json \
-    --image="southamerica-east1-docker.pkg.dev/motors-word/ingest-motors-word-v1/motors-word-dev:latest" \
+gcloud dataflow flex-template build gs://etl-postgres-mss/templates/bach_ingest-motors-word.json \
+    --image="southamerica-east1-docker.pkg.dev/motors-word/bach_ingest-motors-word/motors-word-dev:latest" \
     --sdk-language "PYTHON" 
 

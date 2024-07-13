@@ -18,7 +18,7 @@ logging.basicConfig(level=logging.INFO, stream=sys.stdout, format="%(asctime)s -
 client = secretmanager.SecretManagerServiceClient()
 
 # Monta o nome do recurso do secret
-name = "projects/1030074550193/secrets/secret-service-account/versions/1"
+name = "projects/1030074550193/secrets/conect-motors-word/versions/1"
 
 # Acessa o valor do secret
 response = client.access_secret_version(name=name)
@@ -46,7 +46,7 @@ def main(argv=None):
         project='motors-word',
         runner='DataflowRunner',
         streaming=False,
-        job_name=f'ingest-motors-word-{formatted_datetime}',
+        job_name=f'bach_ingest-motors-word-{formatted_datetime}',
         temp_location='gs://motors-word/temp',
         staging_location='gs://motors-word/staging',
         #template_location=f'gs://motors-word/templates/template-novadrive-ingest-{formatted_datetime}',

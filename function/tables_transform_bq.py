@@ -14,7 +14,7 @@ class TablesTransformBQ(beam.DoFn):
             client = secretmanager.SecretManagerServiceClient()
 
             # Monta o nome do recurso do secret
-            name = "projects/1030074550193/secrets/secret-service-account/versions/1"
+            name = "projects/1030074550193/secrets/conect-motors-word/versions/1"
 
             # Acessa o valor do secret
             response = client.access_secret_version(name=name)
@@ -30,7 +30,7 @@ class TablesTransformBQ(beam.DoFn):
 
             # Configurações do BigQuery
             project_id = 'motors-word'
-            dataset_id = 'motors_word_silver'
+            dataset_id = 'motors_word_bronze'
             
             # Carregar dados do GCS
             bucket_name = 'motors-word'
