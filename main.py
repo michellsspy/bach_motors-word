@@ -80,7 +80,7 @@ def main(argv=None):
     from function.tables_transform_bq import TablesTransformBQ
 
 
-    with beam.Pipeline(options=options) as p1:
+    with beam.Pipeline() as p1:
         get_names = (
             p1
             | f'Create get names' >> beam.Create([None])
